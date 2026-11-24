@@ -64,12 +64,14 @@ const DEST = join(OUTPUT_DIR, 'entry.txt');
 // Gate: the entry must be one line of 1-120 characters, not only
 // whitespace — the same gate the sealed scorer applies. It must also
 // carry no leading or trailing space: a stray space would be counted
-// in the 120 and would read as a typo to the judge.
+// in the 120 and would read as a typo to the judge. A carriage return
+// is rejected too: it would make the line render doubled in some
+// viewers, so it is treated like a newline here.
 if (LINE.length < 1 || LINE.length > 120) {
   console.error(`entry line is ${LINE.length} characters, outside 1-120`);
   process.exit(1);
 }
-if (LINE !== LINE.trim() || LINE.includes('\n')) {
+if (LINE !== LINE.trim() || LINE.includes('\n') || LINE.includes('\r')) {
   console.error('entry line must be a single line with no surrounding whitespace');
   process.exit(1);
 }
